@@ -9,5 +9,5 @@ Berikut merupakan gambar atau UI dari aplikasi MyRecipe
 ![Screenshot 2024-04-10 135311](https://github.com/BagusWahyuMahendra/tugas-1-pemrogramanMobile/assets/114908291/fd21abfc-dffd-43dc-aeaf-14cb25e17d2d)
 ![Screenshot 2024-04-10 135324](https://github.com/BagusWahyuMahendra/tugas-1-pemrogramanMobile/assets/114908291/fde01fd1-9b51-42ad-9932-90168ab17f2d)
 
-img align="center"
+
 
