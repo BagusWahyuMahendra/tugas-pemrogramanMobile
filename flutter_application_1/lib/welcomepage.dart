@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/login.dart';
-import 'package:flutter_application_1/signup.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class WelcomePage extends StatelessWidget {
@@ -10,10 +8,6 @@ class WelcomePage extends StatelessWidget {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          Image.asset(
-            'images/bg.png',
-            fit: BoxFit.fill,
-          ),
           SafeArea(
             child: Container(
               width: double.infinity,
@@ -25,7 +19,7 @@ class WelcomePage extends StatelessWidget {
                   Column(
                     children: [
                       Text(
-                        "MyRecipe",
+                        "SIPINJAM",
                         style: GoogleFonts.manrope(
                           fontWeight: FontWeight.bold,
                           fontSize: 30,
@@ -35,7 +29,7 @@ class WelcomePage extends StatelessWidget {
                         height: 10,
                       ),
                       Text(
-                        "Your culinary journey starts here",
+                        "Simpan Pinjam Application",
                         textAlign: TextAlign.center,
                         style: GoogleFonts.manrope(
                           color: Colors.grey[700],
@@ -61,14 +55,9 @@ class WelcomePage extends StatelessWidget {
                         minWidth: double.infinity,
                         height: 60,
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => LoginPage(),
-                            ),
-                          );
+                          Navigator.pushNamed(context, '/login');
                         },
-                        color: Color(0xFF009944),
+                        color: Color(0xFF1B8989),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(50),
                         ),
@@ -88,12 +77,7 @@ class WelcomePage extends StatelessWidget {
                         minWidth: double.infinity,
                         height: 60,
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => SignUpPage(),
-                            ),
-                          );
+                          Navigator.pushNamed(context, '/register');
                         },
                         color: Color(0xFFFFFFFF),
                         shape: RoundedRectangleBorder(

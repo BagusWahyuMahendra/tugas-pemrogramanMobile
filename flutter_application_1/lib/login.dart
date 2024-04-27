@@ -1,7 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/homepage.dart';
-import 'package:flutter_application_1/signup.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get_storage/get_storage.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -11,7 +11,9 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-
+  final _dio = Dio();
+  final _storage = GetStorage();
+  final _apiUrl = 'https://mobileapis.manpits.xyz/api';
   bool _isObscure = true;
 
   @override
@@ -19,20 +21,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(
-            Icons.arrow_back_ios,
-            size: 20,
-            color: Colors.black,
-          ),
-        ),
-      ),
+      appBar: AppBar(),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: double.infinity,
@@ -140,14 +129,9 @@ class _LoginPageState extends State<LoginPage> {
                       minWidth: double.infinity,
                       height: 60,
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => HomePage(),
-                          ),
-                        );
+                        goLogin();
                       },
-                      color: Color(0xff009944),
+                      color: Color(0xFF1B8989),
                       elevation: 0,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(50),
@@ -171,12 +155,7 @@ class _LoginPageState extends State<LoginPage> {
                       Text("Don't have an account?"),
                       GestureDetector(
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => SignUpPage(),
-                            ),
-                          );
+                          Navigator.pushNamed(context, '/register');
                         },
                         child: Text(
                           " Sign up",
@@ -228,5 +207,25 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  void goLogin() async {
+    String email = emailController.text;
+    String password = passwordController.text;
+
+    try {
+      final _response = await _dio.post(
+        '${_apiUrl}/login',
+        data: {
+          'email': email,
+          'password': password,
+        },
+      );
+      print(_response.data);
+      _storage.write('token', _response.data['data']['token']);
+      Navigator.pushNamed(context, '/homepage');
+    } on DioException catch (e) {
+      print('${e.response} - ${e.response?.statusCode}');
+    }
   }
 }
