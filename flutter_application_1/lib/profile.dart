@@ -15,6 +15,7 @@ class _ProfilePageState extends State<ProfilePage> {
   String _id = '';
   String _name = '';
   String _email = '';
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -39,127 +40,134 @@ class _ProfilePageState extends State<ProfilePage> {
           },
         ),
       ),
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        margin: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: Color(0xFF1B8989)),
-        ),
-        child: Center(
-          child: Column(
-            children: [
-              Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                    image: AssetImage('images/profil.png'),
-                    fit: BoxFit.cover,
-                  ),
-                ),
+      body: isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : Container(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              margin: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: Color(0xFF1B8989)),
               ),
-              SizedBox(height: 50),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // ID USER
-                  Text(
-                    'ID User',
-                    style: TextStyle(
-                      fontSize: 16,
+              child: Center(
+                child: Column(
+                  children: [
+                    Container(
+                      width: 100,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image: AssetImage('images/profil.png'),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 50),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // ID USER
+                        Text(
+                          'ID User',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Color(0xFF1B8989),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Container(
+                          width: double.infinity,
+                          padding: EdgeInsets.all(8),
+                          margin: EdgeInsets.only(bottom: 8),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Color(0xFF1B8989)),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            _id,
+                            style: TextStyle(
+                                fontSize: 16, color: Color(0xFF1B8989)),
+                          ),
+                        ),
+
+                        // Name
+                        Text(
+                          'Name',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Color(0xFF1B8989), // Warna teks label
+                            fontWeight: FontWeight.bold, // Teks tebal
+                          ),
+                        ),
+                        Container(
+                          width: double.infinity,
+                          padding: EdgeInsets.all(8),
+                          margin: EdgeInsets.only(bottom: 8),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Color(0xFF1B8989)),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            _name,
+                            style: TextStyle(
+                                fontSize: 16, color: Color(0xFF1B8989)),
+                          ),
+                        ),
+
+                        // Email
+                        Text(
+                          'Email',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Color(0xFF1B8989), // Warna teks label
+                            fontWeight: FontWeight.bold, // Teks tebal
+                          ),
+                        ),
+                        Container(
+                          width: double.infinity,
+                          padding: EdgeInsets.all(8),
+                          margin: EdgeInsets.only(bottom: 8),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Color(0xFF1B8989)),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            _email,
+                            style: TextStyle(
+                                fontSize: 16, color: Color(0xFF1B8989)),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 50),
+                    MaterialButton(
+                      minWidth: 150,
+                      height: 60,
+                      onPressed: () {
+                        goLogout();
+                      },
                       color: Color(0xFF1B8989),
-                      fontWeight: FontWeight.bold,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      child: Text(
+                        "Logout",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 18,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.all(8),
-                    margin: EdgeInsets.only(bottom: 8),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Color(0xFF1B8989)),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Text(
-                      _id,
-                      style: TextStyle(fontSize: 16, color: Color(0xFF1B8989)),
-                    ),
-                  ),
-
-                  // Name
-                  Text(
-                    'Name',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Color(0xFF1B8989), // Warna teks label
-                      fontWeight: FontWeight.bold, // Teks tebal
-                    ),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.all(8),
-                    margin: EdgeInsets.only(bottom: 8),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Color(0xFF1B8989)),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Text(
-                      _name,
-                      style: TextStyle(fontSize: 16, color: Color(0xFF1B8989)),
-                    ),
-                  ),
-
-                  // Email
-                  Text(
-                    'Email',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Color(0xFF1B8989), // Warna teks label
-                      fontWeight: FontWeight.bold, // Teks tebal
-                    ),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.all(8),
-                    margin: EdgeInsets.only(bottom: 8),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Color(0xFF1B8989)),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Text(
-                      _email,
-                      style: TextStyle(fontSize: 16, color: Color(0xFF1B8989)),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 50),
-              MaterialButton(
-                minWidth: 150,
-                height: 60,
-                onPressed: () {
-                  goLogout();
-                },
-                color: Color(0xFF1B8989),
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50),
-                ),
-                child: Text(
-                  "Logout",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 18,
-                    color: Colors.white,
-                  ),
+                  ],
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
+            ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: (index) {
@@ -187,6 +195,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void goDetailUser() async {
+    isLoading = true;
     try {
       final _response = await _dio.get(
         '${_apiUrl}/user',
@@ -209,9 +218,11 @@ class _ProfilePageState extends State<ProfilePage> {
           _id = id;
           _name = name;
           _email = email;
+          isLoading = false;
         });
       } else {
         // Respons gagal
+        isLoading = false;
         print('Failed to load user data: ${_response.statusCode}');
       }
     } on DioException catch (e) {
