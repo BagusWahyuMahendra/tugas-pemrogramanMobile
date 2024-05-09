@@ -52,7 +52,9 @@ class _HomePageState extends State<HomePage> {
             ListTile(
               leading: Icon(Icons.people),
               title: Text('Member List'),
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(context, '/listMember');
+              },
             ),
             ListTile(
               leading: Icon(Icons.logout_outlined),
