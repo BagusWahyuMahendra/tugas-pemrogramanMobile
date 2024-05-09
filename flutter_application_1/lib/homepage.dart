@@ -1,5 +1,6 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:get_storage/get_storage.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -7,23 +8,62 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final _dio = Dio();
+  final _storage = GetStorage();
+  final _apiUrl = 'https://mobileapis.manpits.xyz/api';
   int _selectedIndex = 0;
-  List<Map<String, String>> users = [
-    {'name': 'Alice', 'email': 'alice@example.com'},
-    {'name': 'Bob', 'email': 'bob@example.com'},
-    {'name': 'Charlie', 'email': 'charlie@example.com'},
-    {'name': 'David', 'email': 'david@example.com'},
-    {'name': 'Eva', 'email': 'eva@example.com'},
-    {'name': 'Frank', 'email': 'frank@example.com'},
-    {'name': 'Grace', 'email': 'grace@example.com'},
-    {'name': 'Henry', 'email': 'henry@example.com'},
-    {'name': 'Ivy', 'email': 'ivy@example.com'},
-    {'name': 'Jack', 'email': 'jack@example.com'},
-  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            Container(
+              height: 100,
+              child: DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Color(0xFF1B8989),
+                ),
+                child: Text(
+                  'SIPINJAM',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                  ),
+                ),
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.home),
+              title: Text('Home'),
+              onTap: () {
+                Navigator.pushReplacementNamed(context, '/homepage');
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.person_add),
+              title: Text('Add Member'),
+              onTap: () {
+                Navigator.pushNamed(context, '/addMember');
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.people),
+              title: Text('Member List'),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: Icon(Icons.logout_outlined),
+              title: Text('Logout'),
+              onTap: () {
+                goLogout();
+              },
+            ),
+          ],
+        ),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: (index) {
@@ -47,111 +87,79 @@ class _HomePageState extends State<HomePage> {
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
         ],
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Stack(
-                children: [
-                  Container(
-                    height: 140,
-                    width: double.infinity,
-                    color: Color(0xFF1B8989),
+      appBar: AppBar(
+        backgroundColor: Color(0xFF1B8989),
+        title: Text(
+          'Home',
+          style: TextStyle(fontSize: 20, color: Colors.white),
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  height: 60,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Color(0xFFF5F5F7),
+                    borderRadius: BorderRadius.circular(30),
                   ),
-                  Column(
-                    children: [
-                      SizedBox(
-                        height: 10,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: TextField(
+                      cursorHeight: 20,
+                      autofocus: false,
+                      decoration: InputDecoration(
+                        hintText: "Search",
+                        prefixIcon: Icon(Icons.search),
+                        border: InputBorder.none,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(15),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Container(
-                                  alignment: Alignment.topLeft,
-                                  height: 45,
-                                  width: 45,
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      image: AssetImage("images/profil.png"),
-                                    ),
-                                    borderRadius: BorderRadius.circular(25),
-                                    border: Border.all(
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  "Welcome to the SIPINJAM App!\nStart managing your savings and loans today!",
-                                  style: GoogleFonts.manrope(
-                                    color: Colors.white,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(15),
-                        child: Container(
-                          height: 60,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: Color(0xFFF5F5F7),
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          child: TextField(
-                            cursorHeight: 20,
-                            autofocus: false,
-                            decoration: InputDecoration(
-                              hintText: "Search",
-                              prefixIcon: Icon(Icons.search),
-                              border: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Colors.grey,
-                                  width: 2,
-                                ),
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 5),
-                      DataTable(
-                        columns: [
-                          DataColumn(label: Text('Name')),
-                          DataColumn(label: Text('Email')),
-                        ],
-                        rows: users
-                            .map(
-                              (user) => DataRow(
-                                cells: [
-                                  DataCell(Text(user['name']!)),
-                                  DataCell(Text(user['email']!)),
-                                ],
-                              ),
-                            )
-                            .toList(),
-                      ),
-                    ],
+                    ),
                   ),
-                ],
-              ),
-            ],
+                ),
+                SizedBox(height: 15),
+                // Center(
+                //   child: DataTable(
+                //     columns: [
+                //       DataColumn(label: Text('Name')),
+                //       DataColumn(label: Text('Email')),
+                //     ],
+                //     rows: users
+                //         .map(
+                //           (user) => DataRow(
+                //             cells: [
+                //               DataCell(Text(user['name']!)),
+                //               DataCell(Text(user['email']!)),
+                //             ],
+                //           ),
+                //         )
+                //         .toList(),
+                //   ),
+                // ),
+              ],
+            ),
           ),
         ),
       ),
     );
+  }
+
+  void goLogout() async {
+    try {
+      final _response = await _dio.get(
+        '${_apiUrl}/logout',
+        options: Options(
+          headers: {'Authorization': 'Bearer ${_storage.read('token')}'},
+        ),
+      );
+      print(_response.data);
+      Navigator.pushNamed(context, '/');
+    } on DioException catch (e) {
+      print('${e.response} - ${e.response?.statusCode}');
+    }
   }
 }

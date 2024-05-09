@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/homepage.dart';
 import 'package:flutter_application_1/login.dart';
 import 'package:flutter_application_1/profile.dart';
+import 'package:flutter_application_1/registerMember.dart';
 import 'package:flutter_application_1/signup.dart';
 import 'package:flutter_application_1/welcomepage.dart';
 import 'package:get_storage/get_storage.dart';
@@ -16,6 +17,7 @@ Future<void> main() async {
       '/register': (context) => SignUpPage(),
       '/homepage': (context) => HomePage(),
       '/profile': (context) => ProfilePage(),
+      '/addMember': (context) => RegisterMemberPage(),
     },
     initialRoute: '/',
   ));
