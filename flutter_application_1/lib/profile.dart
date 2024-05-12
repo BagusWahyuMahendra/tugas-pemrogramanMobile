@@ -273,6 +273,17 @@ class _ProfilePageState extends State<ProfilePage> {
                       Navigator.pushNamed(context, '/');
                     } on DioException catch (e) {
                       print('${e.response} - ${e.response?.statusCode}');
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            'Your token is expired. Login Please.',
+                            textAlign: TextAlign.center,
+                          ),
+                          duration: Duration(seconds: 3),
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );
+                      Navigator.pushReplacementNamed(context, '/login');
                     }
                   },
                   child: Text("Yes"),

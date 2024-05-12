@@ -125,7 +125,19 @@ class _MemberListPageState extends State<MemberListPage> {
         print('Terjadi kesalahan: ${response.statusCode}');
       }
     } on DioException catch (e) {
-      print('Terjadi kesalahan: ${e.message}');
+      isLoading = false;
+      print('${e.response} - ${e.response?.statusCode}');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Your token is expired. Login Please.',
+            textAlign: TextAlign.center,
+          ),
+          duration: Duration(seconds: 3),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      Navigator.pushReplacementNamed(context, '/login');
     } finally {
       setState(() {
         isLoading = false;

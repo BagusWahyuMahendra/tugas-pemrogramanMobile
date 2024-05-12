@@ -259,25 +259,18 @@ class _RegisterMemberPageState extends State<RegisterMemberPage> {
         );
       }
     } on DioException catch (e) {
-      // Handle jika terjadi kesalahan
       print('${e.response} - ${e.response?.statusCode}');
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("Error"),
-            content: Text("Failed to add member. Please try again later."),
-            actions: <Widget>[
-              MaterialButton(
-                child: Text("OK"),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Your token is expired. Login Please.',
+            textAlign: TextAlign.center,
+          ),
+          duration: Duration(seconds: 3),
+          behavior: SnackBarBehavior.floating,
+        ),
       );
+      Navigator.pushReplacementNamed(context, '/login');
     }
   }
 }
