@@ -258,7 +258,7 @@ class _EditMemberPageState extends State<EditMemberPage> {
                   onPressed: () {
                     Navigator.pushNamed(
                       context,
-                      '/listMember',
+                      '/homepage',
                     );
                   },
                 ),

@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> {
             if (index == 0) {
               Navigator.pushReplacementNamed(context, '/homepage');
             } else if (index == 1) {
-              Navigator.pushReplacementNamed(context, '/favorite');
+              // Navigator.pushReplacementNamed(context, '/favorite');
             } else if (index == 2) {
               Navigator.pushNamed(context, '/profile');
             }
@@ -124,12 +124,125 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 SizedBox(height: 15),
+                GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                  ),
+                  itemCount: 4,
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemBuilder: (BuildContext context, int index) {
+                    return GestureDetector(
+                      onTap: () {
+                        // Handle onTap event
+                        switch (index) {
+                          case 0:
+                            Navigator.pushNamed(context, '/addMember');
+                            break;
+                          case 1:
+                            Navigator.pushNamed(context, '/listMember');
+                            break;
+                          case 2:
+                            // Navigator.pushNamed(context, '/totalKas');
+                            break;
+                          case 3:
+                            // Navigator.pushNamed(context, '/totalLoan');
+                            break;
+                          default:
+                            break;
+                        }
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Color(0xFF1B8989),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              // You can add IconButton like this
+                              IconButton(
+                                icon: Icon(getIcon(index)),
+                                iconSize: 50,
+                                color: Colors.white,
+                                onPressed: () {
+                                  // Handle onTap event
+                                  switch (index) {
+                                    case 0:
+                                      Navigator.pushNamed(
+                                          context, '/addMember');
+                                      break;
+                                    case 1:
+                                      Navigator.pushNamed(
+                                          context, '/listMember');
+                                      break;
+                                    case 2:
+                                      // Navigator.pushNamed(context, '/totalKas');
+                                      break;
+                                    case 3:
+                                      // Navigator.pushNamed(
+                                      //     context, '/totalLoan');
+                                      break;
+                                    default:
+                                      break;
+                                  }
+                                },
+                              ),
+                              SizedBox(height: 10),
+                              Text(
+                                getTitle(
+                                    index), // Function to get the title based on index
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  String getTitle(int index) {
+    switch (index) {
+      case 0:
+        return 'Add Member';
+      case 1:
+        return 'List Member';
+      case 2:
+        return 'Total Kas';
+      case 3:
+        return 'Total Loan';
+      default:
+        return '';
+    }
+  }
+
+  IconData getIcon(int index) {
+    switch (index) {
+      case 0:
+        return Icons.person_add;
+      case 1:
+        return Icons.people;
+      case 2:
+        return Icons.attach_money;
+      case 3:
+        return Icons.monetization_on;
+      default:
+        return Icons.error;
+    }
   }
 
   void goLogout() async {

@@ -176,7 +176,7 @@ class _ProfilePageState extends State<ProfilePage> {
             if (index == 0) {
               Navigator.pushReplacementNamed(context, '/homepage');
             } else if (index == 1) {
-              Navigator.pushReplacementNamed(context, '/favorite');
+              // Navigator.pushReplacementNamed(context, '/favorite');
             } else if (index == 2) {
               Navigator.pushReplacementNamed(context, '/profile');
             }
