@@ -216,6 +216,7 @@ class _RegisterMemberPageState extends State<RegisterMemberPage> {
           'alamat': alamat,
           'tgl_lahir': tgl_lahir,
           'telepon': telepon,
+          'status_aktif': 1,
         },
       );
       if (_response.statusCode == 200) {

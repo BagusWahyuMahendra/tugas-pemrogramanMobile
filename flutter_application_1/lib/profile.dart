@@ -231,17 +231,46 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void goLogout() async {
-    try {
-      final _response = await _dio.get(
-        '${_apiUrl}/logout',
-        options: Options(
-          headers: {'Authorization': 'Bearer ${_storage.read('token')}'},
-        ),
-      );
-      print(_response.data);
-      Navigator.pushNamed(context, '/');
-    } on DioException catch (e) {
-      print('${e.response} - ${e.response?.statusCode}');
-    }
+    if (context == null) return;
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return AlertDialog(
+              title: Text("Confirmation"),
+              content: Text("Are you sure you want to logout?"),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text("Cancel"),
+                ),
+                TextButton(
+                  onPressed: () async {
+                    try {
+                      final _response = await _dio.get(
+                        '${_apiUrl}/logout',
+                        options: Options(
+                          headers: {
+                            'Authorization': 'Bearer ${_storage.read('token')}'
+                          },
+                        ),
+                      );
+                      print(_response.data);
+                      Navigator.pushNamed(context, '/');
+                    } on DioException catch (e) {
+                      print('${e.response} - ${e.response?.statusCode}');
+                    }
+                  },
+                  child: Text("Yes"),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
   }
 }

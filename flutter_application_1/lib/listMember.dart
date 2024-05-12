@@ -58,7 +58,7 @@ class _MemberListPageState extends State<MemberListPage> {
                               style: TextStyle(color: Colors.white),
                             ),
                             onTap: () {
-                              // Tambahkan aksi yang diinginkan saat item diklik
+                              goMemberDetail(member.id ?? 0);
                             },
                             trailing: Row(
                               mainAxisSize: MainAxisSize.min,
@@ -67,7 +67,9 @@ class _MemberListPageState extends State<MemberListPage> {
                                   icon: Icon(Icons.edit),
                                   color: Colors.white,
                                   onPressed: () {
-                                    // Tambahkan logika untuk aksi edit detail
+                                    Navigator.pushReplacementNamed(
+                                        context, '/editMember',
+                                        arguments: member?.id);
                                   },
                                 ),
                                 IconButton(
@@ -173,6 +175,66 @@ class _MemberListPageState extends State<MemberListPage> {
       },
     );
   }
+
+  void goMemberDetail(int id) async {
+    try {
+      final _response = await _dio.get(
+        '$_apiUrl/anggota/$id',
+        options: Options(
+          headers: {'Authorization': 'Bearer ${_storage.read('token')}'},
+        ),
+      );
+
+      if (_response.statusCode == 200) {
+        final responseData = _response.data;
+        final memberData = responseData['data']['anggota'];
+        Member? selectedMember = Member.fromJson(memberData);
+
+        if (selectedMember != null) {
+          String statusAktifText =
+              selectedMember.statusAktif == 1 ? 'Active' : 'Non Active';
+
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text("Detail Member"),
+                content: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text("ID: ${selectedMember.id ?? 'Not Found'}"),
+                    Text(
+                        "Nomor Induk: ${selectedMember.nomorInduk ?? 'Not Found'}"),
+                    Text("Nama: ${selectedMember.nama ?? 'Not Found'}"),
+                    Text("Alamat: ${selectedMember.alamat ?? 'Not Found'}"),
+                    Text(
+                        "Tanggal Lahir: ${selectedMember.tglLahir ?? 'Not Found'}"),
+                    Text("Telepon: ${selectedMember.telepon ?? 'Not Found'}"),
+                    Text("Status: ${statusAktifText}"),
+                  ],
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text("Tutup"),
+                  ),
+                ],
+              );
+            },
+          );
+        } else {
+          print("Data anggota tidak ditemukan.");
+        }
+      } else {
+        print('Terjadi kesalahan: ${_response.statusCode}');
+      }
+    } on DioError catch (e) {
+      print('Terjadi kesalahan: ${e.message}');
+    }
+  }
 }
 
 class Member {
@@ -182,6 +244,7 @@ class Member {
   String? alamat;
   String? tglLahir;
   String? telepon;
+  int? statusAktif;
 
   Member({
     this.id,
@@ -190,27 +253,27 @@ class Member {
     this.alamat,
     this.tglLahir,
     this.telepon,
+    this.statusAktif,
   });
 
-  // Mengkonversi JSON ke objek Member
-  Member.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    nomorInduk = json['nomor_induk'];
-    nama = json['nama'];
-    alamat = json['alamat'];
-    tglLahir = json['tgl_lahir'];
-    telepon = json['telepon'];
-  }
+  Member.fromJson(Map<String, dynamic> json)
+      : id = json['id'],
+        nomorInduk = json['nomor_induk'],
+        nama = json['nama'],
+        alamat = json['alamat'],
+        tglLahir = json['tgl_lahir'],
+        telepon = json['telepon'],
+        statusAktif = json['status_aktif'];
 
-  // Mengkonversi data objek Member ke JSON
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['nomor_induk'] = nomorInduk;
-    data['nama'] = nama;
-    data['alamat'] = alamat;
-    data['tgl_lahir'] = tglLahir;
-    data['telepon'] = telepon;
-    return data;
+    return {
+      'id': id,
+      'nomor_induk': nomorInduk,
+      'nama': nama,
+      'alamat': alamat,
+      'tgl_lahir': tglLahir,
+      'telepon': telepon,
+      'status_aktif': statusAktif,
+    };
   }
 }

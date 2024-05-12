@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/editMember.dart';
 import 'package:flutter_application_1/homepage.dart';
 import 'package:flutter_application_1/listMember.dart';
 import 'package:flutter_application_1/login.dart';
@@ -20,6 +21,7 @@ Future<void> main() async {
       '/profile': (context) => ProfilePage(),
       '/addMember': (context) => RegisterMemberPage(),
       '/listMember': (context) => MemberListPage(),
+      '/editMember': (context) => EditMemberPage(),
     },
     initialRoute: '/',
   ));
