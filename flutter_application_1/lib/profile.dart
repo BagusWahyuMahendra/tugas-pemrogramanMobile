@@ -176,7 +176,7 @@ class _ProfilePageState extends State<ProfilePage> {
             if (index == 0) {
               Navigator.pushReplacementNamed(context, '/homepage');
             } else if (index == 1) {
-              // Navigator.pushReplacementNamed(context, '/favorite');
+              // Navigator.pushReplacementNamed(context, '/wallet');
             } else if (index == 2) {
               Navigator.pushReplacementNamed(context, '/profile');
             }
@@ -185,8 +185,8 @@ class _ProfilePageState extends State<ProfilePage> {
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
           BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: "Favorite",
+            icon: Icon(Icons.wallet),
+            label: "Wallet",
           ),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
         ],
@@ -221,12 +221,23 @@ class _ProfilePageState extends State<ProfilePage> {
           isLoading = false;
         });
       } else {
-        // Respons gagal
         isLoading = false;
         print('Failed to load user data: ${_response.statusCode}');
       }
     } on DioException catch (e) {
+      isLoading = false;
       print('${e.response} - ${e.response?.statusCode}');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Your token is expired. Login Please.',
+            textAlign: TextAlign.center,
+          ),
+          duration: Duration(seconds: 3),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      Navigator.pushReplacementNamed(context, '/login');
     }
   }
 
