@@ -6,16 +6,26 @@ Sekilas penjelasan mengenai aplikasi mobile ini, yaitu Aplikasi Mobile dengan na
 
 Berikut merupakan tampilan UI dari aplikasi SIPINJAM
 
-![image](https://github.com/BagusWahyuMahendra/tugas-1-pemrogramanMobile/assets/114908291/e0282d1e-faa3-432f-83ad-1de40743f915)
-![image](https://github.com/BagusWahyuMahendra/tugas-1-pemrogramanMobile/assets/114908291/7171a90f-c088-472e-ab81-c38027bb4ed8)
-![image](https://github.com/BagusWahyuMahendra/tugas-1-pemrogramanMobile/assets/114908291/3790b86f-d7f7-4cc6-b2ad-edc699dae62f)
-![image](https://github.com/BagusWahyuMahendra/tugas-1-pemrogramanMobile/assets/114908291/fc626baa-2fcb-4c8b-bd06-2b66dd8a4733)
-![image](https://github.com/BagusWahyuMahendra/tugas-1-pemrogramanMobile/assets/114908291/40865a88-fb25-431c-99be-1c2214eb4d7d)
-![image](https://github.com/BagusWahyuMahendra/tugas-1-pemrogramanMobile/assets/114908291/eff63b3d-4a45-4d39-830f-d92ae67ec30d)
-![image](https://github.com/BagusWahyuMahendra/tugas-1-pemrogramanMobile/assets/114908291/5796a20e-4856-4358-b1e2-4fbb7a12e984)
-![image](https://github.com/BagusWahyuMahendra/tugas-1-pemrogramanMobile/assets/114908291/fadc1311-a410-4c9c-9e46-91f0f5394695)
-![image](https://github.com/BagusWahyuMahendra/tugas-1-pemrogramanMobile/assets/114908291/15f2cb32-a11f-4648-b2f6-faca02724405)
-![image](https://github.com/BagusWahyuMahendra/tugas-1-pemrogramanMobile/assets/114908291/29c60d53-15c7-4d57-a88d-fbda3c92d7e7)
+![Screenshot_20240513_124659](https://github.com/BagusWahyuMahendra/tugas-pemrogramanMobile/assets/114908291/62dc5e21-f399-40d7-b85b-4c5b84a426c3)
+![Screenshot_20240513_124816](https://github.com/BagusWahyuMahendra/tugas-pemrogramanMobile/assets/114908291/cde5163d-f3f7-418d-98ed-4d783c0e97c9)
+![Screenshot_20240513_124831](https://github.com/BagusWahyuMahendra/tugas-pemrogramanMobile/assets/114908291/aa029da9-f9f7-4846-8e5f-cc861bf67fd9)
+![Screenshot_20240513_125056](https://github.com/BagusWahyuMahendra/tugas-pemrogramanMobile/assets/114908291/c860ede4-c332-4a3c-a35c-211a21751180)
+![Screenshot_20240513_125112](https://github.com/BagusWahyuMahendra/tugas-pemrogramanMobile/assets/114908291/b9d8e82b-0b3d-460d-9c7f-1c495c26f72a)
+![Screenshot_20240513_125133](https://github.com/BagusWahyuMahendra/tugas-pemrogramanMobile/assets/114908291/05e71bc4-ae90-40f0-aaf8-2eaea194db69)
+![Screenshot_20240513_125146](https://github.com/BagusWahyuMahendra/tugas-pemrogramanMobile/assets/114908291/55d88af6-52a1-4a55-ab66-22d4e135c94f)
+![Screenshot_20240513_125203](https://github.com/BagusWahyuMahendra/tugas-pemrogramanMobile/assets/114908291/90c84fd2-a381-47ed-9dde-ad15300263db)
+![Screenshot_20240513_125216](https://github.com/BagusWahyuMahendra/tugas-pemrogramanMobile/assets/114908291/06ee4905-8208-4a13-89ca-b05d97e836c4)
+![Screenshot_20240513_125227](https://github.com/BagusWahyuMahendra/tugas-pemrogramanMobile/assets/114908291/3b58663f-8732-44d7-a5ea-58d78b10a752)
+
+
+
+
+
+
+
+
+
+
 
 
 
