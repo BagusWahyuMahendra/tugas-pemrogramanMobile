@@ -163,13 +163,11 @@ class _HomePageState extends State<HomePage> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              // You can add IconButton like this
                               IconButton(
                                 icon: Icon(getIcon(index)),
                                 iconSize: 50,
                                 color: Colors.white,
                                 onPressed: () {
-                                  // Handle onTap event
                                   switch (index) {
                                     case 0:
                                       Navigator.pushNamed(
@@ -193,8 +191,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                               SizedBox(height: 10),
                               Text(
-                                getTitle(
-                                    index), // Function to get the title based on index
+                                getTitle(index),
                                 style: TextStyle(
                                   fontSize: 18,
                                   color: Colors.white,

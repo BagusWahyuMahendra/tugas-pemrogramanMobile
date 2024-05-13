@@ -30,7 +30,10 @@ class _MemberListPageState extends State<MemberListPage> {
         backgroundColor: Color(0xFF1B8989),
         title: Text(
           'Member List',
-          style: TextStyle(fontSize: 20, color: Colors.white),
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.white,
+          ),
         ),
       ),
       body: isLoading
