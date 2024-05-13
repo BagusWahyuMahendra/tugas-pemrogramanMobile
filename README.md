@@ -1,4 +1,4 @@
-# Membuat halaman Landing page, Login, Sign up, dan Home page menggunakan Flutter
+# Membuat Aplikasi Simpan Pinjam Menggunakan Flutter Dart
 
 I Made Bagus Wahyu Mahendra_2205551002
 
