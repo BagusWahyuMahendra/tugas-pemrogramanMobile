@@ -29,7 +29,7 @@ class _TransaksiMemberPageState extends State<TransaksiMemberPage> {
       appBar: AppBar(
         backgroundColor: Color(0xFF1B8989),
         title: Text(
-          'Member List',
+          'Transaksi Member',
           style: TextStyle(
             fontSize: 20,
             color: Colors.white,

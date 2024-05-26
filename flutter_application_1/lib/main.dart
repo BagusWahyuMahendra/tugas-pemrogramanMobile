@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/detailMember.dart';
 import 'package:flutter_application_1/editMember.dart';
 import 'package:flutter_application_1/homepage.dart';
+import 'package:flutter_application_1/jenisTransaksi.dart';
 import 'package:flutter_application_1/listMember.dart';
 import 'package:flutter_application_1/listTabungan.dart';
 import 'package:flutter_application_1/login.dart';
@@ -32,6 +33,7 @@ Future<void> main() async {
       '/addTabungan': (context) => TambahTabunganPage(),
       '/listTabungan': (context) => ListTabunganPage(),
       '/saldoMember': (context) => SaldoMemberPage(),
+      '/jenisTransaksi': (context) => JenisTransaksiPage(),
     },
     initialRoute: '/',
   ));

@@ -51,9 +51,23 @@ class _HomePageState extends State<HomePage> {
             ),
             ListTile(
               leading: Icon(Icons.people),
-              title: Text('Member List'),
+              title: Text('List Member'),
               onTap: () {
                 Navigator.pushNamed(context, '/listMember');
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.attach_money),
+              title: Text('Transaksi Member'),
+              onTap: () {
+                Navigator.pushNamed(context, '/listTransaksi');
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.attach_money),
+              title: Text('Jenis Transaksi'),
+              onTap: () {
+                Navigator.pushNamed(context, '/jenisTransaksi');
               },
             ),
             ListTile(
@@ -182,8 +196,8 @@ class _HomePageState extends State<HomePage> {
                                           context, '/listTransaksi');
                                       break;
                                     case 3:
-                                      // Navigator.pushNamed(
-                                      //     context, '/totalLoan');
+                                      Navigator.pushNamed(
+                                          context, '/jenisTransaksi');
                                       break;
                                     default:
                                       break;
@@ -222,7 +236,7 @@ class _HomePageState extends State<HomePage> {
       case 2:
         return 'Transaksi Member';
       case 3:
-        return 'Total Loan';
+        return 'Jenis Transaksi';
       default:
         return '';
     }

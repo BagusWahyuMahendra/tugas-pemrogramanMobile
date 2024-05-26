@@ -20,6 +20,15 @@ class _TambahTabunganPageState extends State<TambahTabunganPage> {
   TextEditingController nominalController = TextEditingController();
   TextEditingController idTransaksiController = TextEditingController();
 
+  final List<Map<int, String>> _jenisTransaksi = [
+    {1: 'Saldo Awal'},
+    {2: 'Simpanan'},
+    {3: 'Penarikan'},
+    {4: 'Bunga Simpanan'},
+    {5: 'Koreksi Penambahan'},
+    {6: 'Koreksi Pengurangan'},
+  ];
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -55,7 +64,7 @@ class _TambahTabunganPageState extends State<TambahTabunganPage> {
           builder: (context) {
             return AlertDialog(
               title: Text('Success'),
-              content: Text('Tabungan berhasil ditambahkan.'),
+              content: Text('Transaksi berhasil ditambahkan.'),
               actions: [
                 TextButton(
                   onPressed: () {
@@ -68,7 +77,7 @@ class _TambahTabunganPageState extends State<TambahTabunganPage> {
           },
         );
       } else {
-        _showErrorDialog('Gagal menambahkan tabungan. Silakan coba lagi.');
+        _showErrorDialog('Gagal menambahkan transaksi. Silakan coba lagi.');
       }
     } on DioException catch (e) {
       print('${e.response} - ${e.response?.statusCode}');
@@ -112,11 +121,17 @@ class _TambahTabunganPageState extends State<TambahTabunganPage> {
       appBar: AppBar(
         backgroundColor: Color(0xFF1B8989),
         title: Text(
-          'Tambah Tabungan',
+          'Tambah Transaksi',
           style: TextStyle(
             fontSize: 20,
             color: Colors.white,
           ),
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushNamed(context, '/listTransaksi');
+          },
         ),
       ),
       body: SingleChildScrollView(
@@ -139,8 +154,7 @@ class _TambahTabunganPageState extends State<TambahTabunganPage> {
               style: TextStyle(fontSize: 18),
             ),
             SizedBox(height: 20),
-            TextField(
-              controller: idTransaksiController,
+            DropdownButtonFormField<int>(
               decoration: InputDecoration(
                 labelText: 'Id Transaksi',
                 border: OutlineInputBorder(
@@ -149,7 +163,15 @@ class _TambahTabunganPageState extends State<TambahTabunganPage> {
                 contentPadding:
                     EdgeInsets.symmetric(vertical: 10, horizontal: 15),
               ),
-              keyboardType: TextInputType.number,
+              items: _jenisTransaksi
+                  .map((map) => DropdownMenuItem<int>(
+                        value: map.keys.first,
+                        child: Text('${map.keys.first} - ${map.values.first}'),
+                      ))
+                  .toList(),
+              onChanged: (value) {
+                idTransaksiController.text = value.toString();
+              },
             ),
             SizedBox(height: 20),
             TextField(
@@ -184,7 +206,7 @@ class _TambahTabunganPageState extends State<TambahTabunganPage> {
                   borderRadius: BorderRadius.circular(50),
                 ),
                 child: Text(
-                  'Tambah Tabungan',
+                  'Tambah Transaksi',
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 18,
