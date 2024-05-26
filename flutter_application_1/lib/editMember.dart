@@ -100,6 +100,12 @@ class _EditMemberPageState extends State<EditMemberPage> {
           'Edit Member',
           style: TextStyle(fontSize: 20, color: Colors.white),
         ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushNamed(context, '/listMember');
+          },
+        ),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -268,10 +274,7 @@ class _EditMemberPageState extends State<EditMemberPage> {
                 TextButton(
                   child: Text("OK"),
                   onPressed: () {
-                    Navigator.pushNamed(
-                      context,
-                      '/homepage',
-                    );
+                    Navigator.pushNamed(context, '/listMember');
                   },
                 ),
               ],
@@ -293,10 +296,7 @@ class _EditMemberPageState extends State<EditMemberPage> {
               TextButton(
                 child: Text("OK"),
                 onPressed: () {
-                  Navigator.pushNamed(
-                    context,
-                    '/homepage',
-                  );
+                  Navigator.pushNamed(context, '/listMember');
                 },
               ),
             ],

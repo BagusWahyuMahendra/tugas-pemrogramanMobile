@@ -178,7 +178,8 @@ class _HomePageState extends State<HomePage> {
                                           context, '/listMember');
                                       break;
                                     case 2:
-                                      // Navigator.pushNamed(context, '/totalKas');
+                                      Navigator.pushNamed(
+                                          context, '/listTransaksi');
                                       break;
                                     case 3:
                                       // Navigator.pushNamed(
@@ -219,7 +220,7 @@ class _HomePageState extends State<HomePage> {
       case 1:
         return 'List Member';
       case 2:
-        return 'Total Kas';
+        return 'Transaksi Member';
       case 3:
         return 'Total Loan';
       default:

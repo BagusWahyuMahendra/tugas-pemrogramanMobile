@@ -2,14 +2,14 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 
-class MemberListPage extends StatefulWidget {
-  const MemberListPage({Key? key});
+class TransaksiMemberPage extends StatefulWidget {
+  const TransaksiMemberPage({Key? key});
 
   @override
-  State<MemberListPage> createState() => _MemberListPageState();
+  State<TransaksiMemberPage> createState() => _TransaksiMemberPageState();
 }
 
-class _MemberListPageState extends State<MemberListPage> {
+class _TransaksiMemberPageState extends State<TransaksiMemberPage> {
   final _dio = Dio();
   final _storage = GetStorage();
   final _apiUrl = 'https://mobileapis.manpits.xyz/api';
@@ -62,30 +62,34 @@ class _MemberListPageState extends State<MemberListPage> {
                               member.nama ?? '',
                               style: TextStyle(color: Colors.white),
                             ),
-                            subtitle: Text(
-                              member.alamat ?? '',
-                              style: TextStyle(color: Colors.white),
-                            ),
                             onTap: () {
-                              Navigator.pushNamed(context, '/detailMember',
+                              Navigator.pushNamed(context, '/listTabungan',
                                   arguments: member?.id);
                             },
                             trailing: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 IconButton(
-                                  icon: Icon(Icons.edit),
+                                  icon: Icon(Icons.add),
                                   color: Colors.white,
                                   onPressed: () {
-                                    Navigator.pushNamed(context, '/editMember',
-                                        arguments: member?.id);
+                                    Navigator.pushNamed(
+                                      context,
+                                      '/addTabungan',
+                                      arguments: {
+                                        'id': member.id,
+                                        'nomor_induk': member.nomorInduk,
+                                        'nama': member.nama,
+                                      },
+                                    );
                                   },
                                 ),
                                 IconButton(
-                                  icon: Icon(Icons.delete),
+                                  icon: Icon(Icons.wallet),
                                   color: Colors.white,
                                   onPressed: () {
-                                    deleteMember(member.id ?? 0);
+                                    Navigator.pushNamed(context, '/saldoMember',
+                                        arguments: member?.id);
                                   },
                                 ),
                               ],
@@ -152,49 +156,6 @@ class _MemberListPageState extends State<MemberListPage> {
         isLoading = false;
       });
     }
-  }
-
-  void deleteMember(int id) async {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Confirmation"),
-          content: Text("Are you sure you want to delete this member?"),
-          actions: [
-            TextButton(
-              onPressed: () async {
-                Navigator.pop(context);
-                try {
-                  final response = await _dio.delete(
-                    '${_apiUrl}/anggota/${id}',
-                    options: Options(
-                      headers: {
-                        'Authorization': 'Bearer ${_storage.read('token')}'
-                      },
-                    ),
-                  );
-                  print(response.data);
-                  setState(() {
-                    // Hapus member dari daftar
-                    memberList.removeWhere((member) => member.id == id);
-                  });
-                } on DioException catch (e) {
-                  print('An error occurred: ${e.message}');
-                }
-              },
-              child: Text("Yes"),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text("No"),
-            ),
-          ],
-        );
-      },
-    );
   }
 }
 
