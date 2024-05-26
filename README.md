@@ -14,7 +14,7 @@ Berikut merupakan tampilan UI dari aplikasi SIPINJAM
 ![image](https://github.com/BagusWahyuMahendra/tugas-pemrogramanMobile/assets/114908291/a7ffb9cc-7f58-4c47-9935-bf317b991897)
 ![image](https://github.com/BagusWahyuMahendra/tugas-pemrogramanMobile/assets/114908291/daea8be8-2486-48f3-886b-5a4227514c8b)
 ![image](https://github.com/BagusWahyuMahendra/tugas-pemrogramanMobile/assets/114908291/05f0f3c5-ea3d-47c0-bcec-fe02bca04808)
-![image](https://github.com/BagusWahyuMahendra/tugas-pemrogramanMobile/assets/114908291/5ff2bc50-3731-480f-918d-9ebc9213cf1d)
+![image](https://github.com/BagusWahyuMahendra/tugas-pemrogramanMobile/assets/114908291/027c75f5-13c6-4766-8a5f-ba43d28ca91a)
 ![image](https://github.com/BagusWahyuMahendra/tugas-pemrogramanMobile/assets/114908291/86e2c1fe-289c-40bb-be45-4e56afd09e97)
 ![image](https://github.com/BagusWahyuMahendra/tugas-pemrogramanMobile/assets/114908291/b725403a-4e31-47bd-a2ae-587b6f99b091)
 ![image](https://github.com/BagusWahyuMahendra/tugas-pemrogramanMobile/assets/114908291/00917eab-7c3c-4f1b-962c-cf1195edff52)
