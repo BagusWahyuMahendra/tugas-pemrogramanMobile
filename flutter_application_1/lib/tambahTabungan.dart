@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:intl/intl.dart';
 
 class TambahTabunganPage extends StatefulWidget {
   const TambahTabunganPage({Key? key}) : super(key: key);
@@ -42,7 +43,7 @@ class _TambahTabunganPageState extends State<TambahTabunganPage> {
   }
 
   Future<void> tambahTabungan() async {
-    final trxNominal = nominalController.text;
+    final trxNominal = nominalController.text.replaceAll('.', '');
     final trxID = idTransaksiController.text;
 
     try {
@@ -115,6 +116,11 @@ class _TambahTabunganPageState extends State<TambahTabunganPage> {
     );
   }
 
+  String formatNominal(int nominal) {
+    final formatter = NumberFormat('#,###', 'id_ID');
+    return formatter.format(nominal);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -140,25 +146,78 @@ class _TambahTabunganPageState extends State<TambahTabunganPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'ID: $anggotaId',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              'ID',
+              style: TextStyle(
+                fontSize: 16,
+                color: Color(0xFF1B8989), // Warna teks label
+                fontWeight: FontWeight.bold, // Teks tebal
+              ),
             ),
-            SizedBox(height: 10),
-            Text(
-              'Nomor Induk: $nomorInduk',
-              style: TextStyle(fontSize: 18),
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.all(8),
+              margin: EdgeInsets.only(bottom: 8),
+              decoration: BoxDecoration(
+                border: Border.all(color: Color(0xFF1B8989)),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Text(
+                'ID: $anggotaId',
+                style: TextStyle(fontSize: 16, color: Color(0xFF1B8989)),
+              ),
             ),
-            SizedBox(height: 10),
             Text(
-              'Nama: $nama',
-              style: TextStyle(fontSize: 18),
+              'No Induk',
+              style: TextStyle(
+                fontSize: 16,
+                color: Color(0xFF1B8989), // Warna teks label
+                fontWeight: FontWeight.bold, // Teks tebal
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.all(8),
+              margin: EdgeInsets.only(bottom: 8),
+              decoration: BoxDecoration(
+                border: Border.all(color: Color(0xFF1B8989)),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Text(
+                'Nomor Induk: $nomorInduk',
+                style: TextStyle(fontSize: 16, color: Color(0xFF1B8989)),
+              ),
+            ),
+            Text(
+              'Nama',
+              style: TextStyle(
+                fontSize: 16,
+                color: Color(0xFF1B8989), // Warna teks label
+                fontWeight: FontWeight.bold, // Teks tebal
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.all(8),
+              margin: EdgeInsets.only(bottom: 8),
+              decoration: BoxDecoration(
+                border: Border.all(color: Color(0xFF1B8989)),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Text(
+                'Nama: $nama',
+                style: TextStyle(fontSize: 16, color: Color(0xFF1B8989)),
+              ),
             ),
             SizedBox(height: 20),
             DropdownButtonFormField<int>(
               decoration: InputDecoration(
-                labelText: 'Id Transaksi',
+                labelText: 'Jenis Transaksi',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(color: Color(0xFF1B8989)),
                 ),
                 contentPadding:
                     EdgeInsets.symmetric(vertical: 10, horizontal: 15),
@@ -180,12 +239,30 @@ class _TambahTabunganPageState extends State<TambahTabunganPage> {
                 labelText: 'Nominal Transaksi',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(color: Color(0xFF1B8989)),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(color: Color(0xFF1B8989)),
                 ),
                 contentPadding:
                     EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                 suffixIcon: Icon(Icons.attach_money),
               ),
               keyboardType: TextInputType.number,
+              onChanged: (value) {
+                // Format nominal input while typing
+                String newValue = value.replaceAll('.', '');
+                if (newValue.isNotEmpty) {
+                  int parsedValue = int.parse(newValue);
+                  nominalController.value = TextEditingValue(
+                    text: formatNominal(parsedValue),
+                    selection: TextSelection.collapsed(
+                      offset: formatNominal(parsedValue).length,
+                    ),
+                  );
+                }
+              },
             ),
             SizedBox(height: 20),
             Padding(

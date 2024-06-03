@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:intl/intl.dart';
 
 class ListTabunganPage extends StatefulWidget {
   const ListTabunganPage({Key? key}) : super(key: key);
@@ -17,6 +18,16 @@ class _ListTabunganPageState extends State<ListTabunganPage> {
 
   List<Tabungan> tabunganList = [];
   bool isLoading = false;
+
+  final Map<int, String> transactionTypes = {
+    1: 'Saldo Awal',
+    2: 'Simpanan',
+    3: 'Penarikan',
+    4: 'Bunga Simpanan',
+    5: 'Koreksi Penambahan',
+    6: 'Koreksi Pengurangan',
+  };
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -34,7 +45,7 @@ class _ListTabunganPageState extends State<ListTabunganPage> {
 
     try {
       final response = await _dio.get(
-        '$_apiUrl/tabungan/$anggotaId ',
+        '$_apiUrl/tabungan/$anggotaId',
         options: Options(
           headers: {'Authorization': 'Bearer ${_storage.read('token')}'},
         ),
@@ -72,13 +83,18 @@ class _ListTabunganPageState extends State<ListTabunganPage> {
     }
   }
 
+  String formatNominal(int nominal) {
+    final formatter = NumberFormat('#,###', 'id_ID');
+    return formatter.format(nominal);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFF1B8989),
         title: Text(
-          'Riwayat Tabungan',
+          'History Transaksi',
           style: TextStyle(
             fontSize: 20,
             color: Colors.white,
@@ -87,32 +103,54 @@ class _ListTabunganPageState extends State<ListTabunganPage> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pushNamed(context, '/listTransaksi');
+            Navigator.pushNamed(context, '/listMember');
           },
         ),
       ),
-      body: isLoading
-          ? Center(child: CircularProgressIndicator())
-          : tabunganList.isEmpty
-              ? Center(child: Text('Tabungan tidak ditemukan'))
-              : ListView.builder(
-                  itemCount: tabunganList.length,
-                  itemBuilder: (context, index) {
-                    final tabungan = tabunganList[index];
-                    return Padding(
-                      padding: EdgeInsets.all(10),
-                      child: ListTile(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)),
-                        tileColor: const Color(0xFF1B8989),
-                        title: Text('ID transaksi: ${tabungan.trxId}',
-                            style: TextStyle(color: Colors.white)),
-                        subtitle: Text('Nominal: Rp${tabungan.trxNominal}',
-                            style: TextStyle(color: Colors.white)),
+      body: Column(
+        children: [
+          Expanded(
+            child: isLoading
+                ? Center(child: CircularProgressIndicator())
+                : tabunganList.isEmpty
+                    ? Center(child: Text('Tabungan tidak ditemukan'))
+                    : ListView.builder(
+                        itemCount: tabunganList.length,
+                        itemBuilder: (context, index) {
+                          final tabungan = tabunganList[index];
+                          final jenisTransaksi =
+                              transactionTypes[tabungan.trxId] ?? 'Unknown';
+                          return Padding(
+                            padding: EdgeInsets.all(10),
+                            child: ListTile(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              tileColor: const Color(0xFF1B8989),
+                              title: Text('Jenis Transaksi: $jenisTransaksi',
+                                  style: TextStyle(color: Colors.white)),
+                              subtitle: Text(
+                                  'Nominal: Rp${formatNominal(tabungan.trxNominal!)}',
+                                  style: TextStyle(color: Colors.white)),
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  },
-                ),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: FloatingActionButton(
+                onPressed: () {
+                  // Add your action here
+                },
+                backgroundColor: Color(0xFF1B8989),
+                child: Icon(Icons.add, color: Colors.white),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
