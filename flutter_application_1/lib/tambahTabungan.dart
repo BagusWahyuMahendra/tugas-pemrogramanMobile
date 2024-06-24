@@ -30,6 +30,8 @@ class _TambahTabunganPageState extends State<TambahTabunganPage> {
     {6: 'Koreksi Pengurangan'},
   ];
 
+  final _formKey = GlobalKey<FormState>();
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -106,7 +108,7 @@ class _TambahTabunganPageState extends State<TambahTabunganPage> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/listTransaksi');
+                Navigator.pop(context);
               },
               child: Text('OK'),
             ),
@@ -136,163 +138,177 @@ class _TambahTabunganPageState extends State<TambahTabunganPage> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pushNamed(context, '/listTransaksi');
+            Navigator.pushNamed(context, '/listMember');
           },
         ),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'ID',
-              style: TextStyle(
-                fontSize: 16,
-                color: Color(0xFF1B8989), // Warna teks label
-                fontWeight: FontWeight.bold, // Teks tebal
-              ),
-            ),
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.all(8),
-              margin: EdgeInsets.only(bottom: 8),
-              decoration: BoxDecoration(
-                border: Border.all(color: Color(0xFF1B8989)),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Text(
-                'ID: $anggotaId',
-                style: TextStyle(fontSize: 16, color: Color(0xFF1B8989)),
-              ),
-            ),
-            Text(
-              'No Induk',
-              style: TextStyle(
-                fontSize: 16,
-                color: Color(0xFF1B8989), // Warna teks label
-                fontWeight: FontWeight.bold, // Teks tebal
-              ),
-            ),
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.all(8),
-              margin: EdgeInsets.only(bottom: 8),
-              decoration: BoxDecoration(
-                border: Border.all(color: Color(0xFF1B8989)),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Text(
-                'Nomor Induk: $nomorInduk',
-                style: TextStyle(fontSize: 16, color: Color(0xFF1B8989)),
-              ),
-            ),
-            Text(
-              'Nama',
-              style: TextStyle(
-                fontSize: 16,
-                color: Color(0xFF1B8989), // Warna teks label
-                fontWeight: FontWeight.bold, // Teks tebal
-              ),
-            ),
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.all(8),
-              margin: EdgeInsets.only(bottom: 8),
-              decoration: BoxDecoration(
-                border: Border.all(color: Color(0xFF1B8989)),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Text(
-                'Nama: $nama',
-                style: TextStyle(fontSize: 16, color: Color(0xFF1B8989)),
-              ),
-            ),
-            SizedBox(height: 20),
-            DropdownButtonFormField<int>(
-              decoration: InputDecoration(
-                labelText: 'Jenis Transaksi',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'ID',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Color(0xFF1B8989), // Warna teks label
+                  fontWeight: FontWeight.bold, // Teks tebal
                 ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: Color(0xFF1B8989)),
-                ),
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 10, horizontal: 15),
               ),
-              items: _jenisTransaksi
-                  .map((map) => DropdownMenuItem<int>(
-                        value: map.keys.first,
-                        child: Text('${map.keys.first} - ${map.values.first}'),
-                      ))
-                  .toList(),
-              onChanged: (value) {
-                idTransaksiController.text = value.toString();
-              },
-            ),
-            SizedBox(height: 20),
-            TextField(
-              controller: nominalController,
-              decoration: InputDecoration(
-                labelText: 'Nominal Transaksi',
-                border: OutlineInputBorder(
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.all(8),
+                margin: EdgeInsets.only(bottom: 8),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Color(0xFF1B8989)),
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: Color(0xFF1B8989)),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: Color(0xFF1B8989)),
-                ),
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                suffixIcon: Icon(Icons.attach_money),
-              ),
-              keyboardType: TextInputType.number,
-              onChanged: (value) {
-                // Format nominal input while typing
-                String newValue = value.replaceAll('.', '');
-                if (newValue.isNotEmpty) {
-                  int parsedValue = int.parse(newValue);
-                  nominalController.value = TextEditingValue(
-                    text: formatNominal(parsedValue),
-                    selection: TextSelection.collapsed(
-                      offset: formatNominal(parsedValue).length,
-                    ),
-                  );
-                }
-              },
-            ),
-            SizedBox(height: 20),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 60),
-              child: MaterialButton(
-                minWidth: double.infinity,
-                height: 60,
-                onPressed: () {
-                  if (nominalController.text.isNotEmpty) {
-                    tambahTabungan();
-                  } else {
-                    _showErrorDialog('Nominal transaksi tidak boleh kosong.');
-                  }
-                },
-                color: Color(0xFF1B8989),
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50),
                 ),
                 child: Text(
-                  'Tambah Transaksi',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 18,
-                    color: Colors.white,
+                  'ID: $anggotaId',
+                  style: TextStyle(fontSize: 16, color: Color(0xFF1B8989)),
+                ),
+              ),
+              Text(
+                'No Induk',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Color(0xFF1B8989), // Warna teks label
+                  fontWeight: FontWeight.bold, // Teks tebal
+                ),
+              ),
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.all(8),
+                margin: EdgeInsets.only(bottom: 8),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Color(0xFF1B8989)),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  'Nomor Induk: $nomorInduk',
+                  style: TextStyle(fontSize: 16, color: Color(0xFF1B8989)),
+                ),
+              ),
+              Text(
+                'Nama',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Color(0xFF1B8989), // Warna teks label
+                  fontWeight: FontWeight.bold, // Teks tebal
+                ),
+              ),
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.all(8),
+                margin: EdgeInsets.only(bottom: 8),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Color(0xFF1B8989)),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  'Nama: $nama',
+                  style: TextStyle(fontSize: 16, color: Color(0xFF1B8989)),
+                ),
+              ),
+              SizedBox(height: 20),
+              DropdownButtonFormField<int>(
+                decoration: InputDecoration(
+                  labelText: 'Jenis Transaksi',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(color: Color(0xFF1B8989)),
+                  ),
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                ),
+                items: _jenisTransaksi
+                    .map((map) => DropdownMenuItem<int>(
+                          value: map.keys.first,
+                          child:
+                              Text('${map.keys.first} - ${map.values.first}'),
+                        ))
+                    .toList(),
+                validator: (value) {
+                  if (value == null) {
+                    return 'Jenis transaksi harus dipilih';
+                  }
+                  return null;
+                },
+                onChanged: (value) {
+                  idTransaksiController.text = value.toString();
+                },
+              ),
+              SizedBox(height: 20),
+              TextFormField(
+                controller: nominalController,
+                decoration: InputDecoration(
+                  labelText: 'Nominal Transaksi',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(color: Color(0xFF1B8989)),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(color: Color(0xFF1B8989)),
+                  ),
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                  suffixIcon: Icon(Icons.attach_money),
+                ),
+                keyboardType: TextInputType.number,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Nominal transaksi tidak boleh kosong';
+                  }
+                  return null;
+                },
+                onChanged: (value) {
+                  // Format nominal input while typing
+                  String newValue = value.replaceAll('.', '');
+                  if (newValue.isNotEmpty) {
+                    int parsedValue = int.parse(newValue);
+                    nominalController.value = TextEditingValue(
+                      text: formatNominal(parsedValue),
+                      selection: TextSelection.collapsed(
+                        offset: formatNominal(parsedValue).length,
+                      ),
+                    );
+                  }
+                },
+              ),
+              SizedBox(height: 20),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 60),
+                child: MaterialButton(
+                  minWidth: double.infinity,
+                  height: 60,
+                  onPressed: () {
+                    if (_formKey.currentState?.validate() ?? false) {
+                      tambahTabungan();
+                    }
+                  },
+                  color: Color(0xFF1B8989),
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                  child: Text(
+                    'Tambah Transaksi',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 18,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

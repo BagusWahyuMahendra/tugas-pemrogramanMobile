@@ -213,6 +213,44 @@ class _LoginPageState extends State<LoginPage> {
     String email = emailController.text;
     String password = passwordController.text;
 
+    if (!isEmailValid(email)) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text("Invalid Email"),
+          content: Text("Please enter a valid email address."),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("OK"),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
+
+    if (password.isEmpty) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text("Invalid Password"),
+          content: Text("Password cannot be empty."),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("OK"),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
+
     try {
       final _response = await _dio.post(
         '${_apiUrl}/login',
@@ -225,7 +263,44 @@ class _LoginPageState extends State<LoginPage> {
       _storage.write('token', _response.data['data']['token']);
       Navigator.pushNamed(context, '/homepage');
     } on DioException catch (e) {
-      print('${e.response} - ${e.response?.statusCode}');
+      if (e.response != null && e.response?.statusCode == 401) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text("Login Failed"),
+            content: Text("Incorrect password. Please try again."),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text("OK"),
+              ),
+            ],
+          ),
+        );
+      } else {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text("Login Failed"),
+            content: Text("Incorrect password. Please try again later."),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text("OK"),
+              ),
+            ],
+          ),
+        );
+      }
     }
+  }
+
+  bool isEmailValid(String email) {
+    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+    return emailRegex.hasMatch(email);
   }
 }

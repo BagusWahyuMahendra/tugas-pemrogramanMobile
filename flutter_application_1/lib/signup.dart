@@ -228,7 +228,28 @@ class _SignUpPageState extends State<SignUpPage> {
   void goRegister() async {
     String name = nameController.text;
     String email = emailController.text;
+    String phone = phoneController.text;
     String password = passwordController.text;
+
+    if (name.isEmpty) {
+      showValidationDialog("Name cannot be empty");
+      return;
+    }
+
+    if (!isEmailValid(email)) {
+      showValidationDialog("Please enter a valid email address");
+      return;
+    }
+
+    if (phone.isEmpty || !isPhoneValid(phone)) {
+      showValidationDialog("Please enter a valid phone number");
+      return;
+    }
+
+    if (password.isEmpty || password.length < 6) {
+      showValidationDialog("Password must be at least 6 characters long");
+      return;
+    }
 
     try {
       final _response = await _dio.post(
@@ -236,6 +257,7 @@ class _SignUpPageState extends State<SignUpPage> {
         data: {
           'name': name,
           'email': email,
+          'phone': phone,
           'password': password,
         },
       );
@@ -244,6 +266,35 @@ class _SignUpPageState extends State<SignUpPage> {
       Navigator.pushNamed(context, '/login');
     } on DioException catch (e) {
       print('${e.response} - ${e.response?.statusCode}');
+      showValidationDialog("Registration failed. Please try again.");
     }
+  }
+
+  bool isEmailValid(String email) {
+    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+    return emailRegex.hasMatch(email);
+  }
+
+  bool isPhoneValid(String phone) {
+    final phoneRegex = RegExp(r'^\+?1?\d{9,15}$');
+    return phoneRegex.hasMatch(phone);
+  }
+
+  void showValidationDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Invalid Input"),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text("OK"),
+          ),
+        ],
+      ),
+    );
   }
 }

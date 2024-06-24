@@ -136,19 +136,19 @@ class _ListTabunganPageState extends State<ListTabunganPage> {
                         },
                       ),
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: FloatingActionButton(
-                onPressed: () {
-                  // Add your action here
-                },
-                backgroundColor: Color(0xFF1B8989),
-                child: Icon(Icons.add, color: Colors.white),
-              ),
-            ),
-          ),
+          // Align(
+          //   alignment: Alignment.bottomCenter,
+          //   child: Padding(
+          //     padding: const EdgeInsets.all(16.0),
+          //     child: FloatingActionButton(
+          //       onPressed: () {
+          //         Navigator.pushNamed(context, '/addTabungan');
+          //       },
+          //       backgroundColor: Color(0xFF1B8989),
+          //       child: Icon(Icons.add, color: Colors.white),
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

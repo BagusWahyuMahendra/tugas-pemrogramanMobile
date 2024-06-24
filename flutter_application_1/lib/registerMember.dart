@@ -9,20 +9,22 @@ class RegisterMemberPage extends StatefulWidget {
 }
 
 class _RegisterMemberPageState extends State<RegisterMemberPage> {
+  final _formKey = GlobalKey<FormState>();
+
   TextEditingController noIndukController = TextEditingController();
   TextEditingController namaController = TextEditingController();
   TextEditingController alamatController = TextEditingController();
   TextEditingController teleponController = TextEditingController();
   TextEditingController tglLahirController = TextEditingController();
 
-  DateTime? _selectedDate; // Untuk menyimpan tanggal yang dipilih
-  // Metode untuk menampilkan DatePicker
+  DateTime? _selectedDate;
+
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime(1900), // Batas awal tahun
-      lastDate: DateTime.now(), // Batas akhir tahun
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
     );
     if (picked != null && picked != _selectedDate) {
       setState(() {
@@ -40,158 +42,189 @@ class _RegisterMemberPageState extends State<RegisterMemberPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       backgroundColor: Colors.white,
-      appBar: AppBar(),
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: double.infinity,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.only(top: 75),
-                    height: 150,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage("images/addMember.png"),
-                        fit: BoxFit.fitHeight,
-                      ),
-                    ),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF1B8989),
+        title: const Text(
+          'Add Member',
+          style: TextStyle(fontSize: 20, color: Colors.white),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              SizedBox(height: 75),
+              Container(
+                height: 150,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage("images/addMember.png"),
+                    fit: BoxFit.fitHeight,
                   ),
-                  Column(
-                    children: <Widget>[
-                      Text(
-                        "Add Member of SiPinjam",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        "Become an official member of SiPinjam",
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.grey[700],
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    child: Column(
-                      children: [
-                        TextField(
-                          controller: noIndukController,
-                          decoration: InputDecoration(
-                            labelText: "No Induk",
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 15),
-                            suffixIcon: Icon(Icons.confirmation_number),
-                          ),
-                        ),
-                        SizedBox(height: 15),
-                        TextField(
-                          controller: namaController,
-                          decoration: InputDecoration(
-                            labelText: "Nama Lengkap",
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 15),
-                            suffixIcon: Icon(Icons.person),
-                          ),
-                        ),
-                        SizedBox(height: 15),
-                        TextField(
-                          controller: alamatController,
-                          decoration: InputDecoration(
-                            labelText: "Alamat",
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 15),
-                            suffixIcon: Icon(Icons.location_on),
-                          ),
-                        ),
-                        SizedBox(height: 15),
-                        TextField(
-                          controller: tglLahirController,
-                          decoration: InputDecoration(
-                            labelText: "Tanggal Lahir",
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            contentPadding: EdgeInsets.symmetric(
-                              vertical: 10,
-                              horizontal: 15,
-                            ),
-                            suffixIcon: IconButton(
-                              icon: Icon(Icons.calendar_today),
-                              onPressed: () {
-                                _selectDate(
-                                    context); // Panggil metode untuk menampilkan DatePicker
-                              },
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 15),
-                        TextField(
-                          controller: teleponController,
-                          decoration: InputDecoration(
-                            labelText: "Telepon",
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 15),
-                            suffixIcon: Icon(Icons.phone),
-                          ),
-                        ),
-                        SizedBox(height: 15),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 60),
-                    child: MaterialButton(
-                      minWidth: double.infinity,
-                      height: 60,
-                      onPressed: () {
-                        goDaftarAnggota();
-                      },
-                      color: Color(0xFF1B8989),
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      child: Text(
-                        "Daftar",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 18,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 15),
-                ],
+                ),
               ),
-            ),
-          ],
+              SizedBox(height: 20),
+              Text(
+                "Add Member of SiPinjam",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                "Become an official member of SiPinjam",
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.grey[700],
+                ),
+              ),
+              SizedBox(height: 20),
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      controller: noIndukController,
+                      decoration: InputDecoration(
+                        labelText: "No Induk",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                        suffixIcon: Icon(Icons.confirmation_number),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter No Induk';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 15),
+                    TextFormField(
+                      controller: namaController,
+                      decoration: InputDecoration(
+                        labelText: "Nama Lengkap",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                        suffixIcon: Icon(Icons.person),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your name';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 15),
+                    TextFormField(
+                      controller: alamatController,
+                      decoration: InputDecoration(
+                        labelText: "Alamat",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                        suffixIcon: Icon(Icons.location_on),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your address';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 15),
+                    TextFormField(
+                      controller: tglLahirController,
+                      decoration: InputDecoration(
+                        labelText: "Tanggal Lahir",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                        suffixIcon: IconButton(
+                          icon: Icon(Icons.calendar_today),
+                          onPressed: () {
+                            _selectDate(context);
+                          },
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your birth date';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 15),
+                    TextFormField(
+                      controller: teleponController,
+                      decoration: InputDecoration(
+                        labelText: "Telepon",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                        suffixIcon: Icon(Icons.phone),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your phone number';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 15),
+                  ],
+                ),
+              ),
+              SizedBox(height: 20),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 60),
+                child: MaterialButton(
+                  minWidth: double.infinity,
+                  height: 60,
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      goDaftarAnggota();
+                    }
+                  },
+                  color: Color(0xFF1B8989),
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                  child: Text(
+                    "Daftar",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 18,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 15),
+            ],
+          ),
         ),
       ),
     );
@@ -239,7 +272,6 @@ class _RegisterMemberPageState extends State<RegisterMemberPage> {
           },
         );
       } else {
-        // Jika respon tidak sukses
         showDialog(
           context: context,
           builder: (BuildContext context) {

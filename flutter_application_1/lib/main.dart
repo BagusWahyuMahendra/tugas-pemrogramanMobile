@@ -9,7 +9,9 @@ import 'package:flutter_application_1/login.dart';
 import 'package:flutter_application_1/profile.dart';
 import 'package:flutter_application_1/registerMember.dart';
 import 'package:flutter_application_1/saldoMember.dart';
+import 'package:flutter_application_1/settingBunga.dart';
 import 'package:flutter_application_1/signup.dart';
+import 'package:flutter_application_1/tambahSettingBunga.dart';
 import 'package:flutter_application_1/tambahTabungan.dart';
 import 'package:flutter_application_1/transaksiMember.dart';
 import 'package:flutter_application_1/welcomepage.dart';
@@ -34,6 +36,8 @@ Future<void> main() async {
       '/listTabungan': (context) => ListTabunganPage(),
       '/saldoMember': (context) => SaldoMemberPage(),
       '/jenisTransaksi': (context) => JenisTransaksiPage(),
+      '/settingBunga': (context) => SettingBungaPage(),
+      '/tambahSettingBunga': (context) => TambahSettingBungaPage(),
     },
     initialRoute: '/',
   ));

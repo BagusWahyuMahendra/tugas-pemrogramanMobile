@@ -144,7 +144,7 @@ class _HomePageState extends State<HomePage> {
                     crossAxisSpacing: 10,
                     mainAxisSpacing: 10,
                   ),
-                  itemCount: 4,
+                  itemCount: 5,
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
                   itemBuilder: (BuildContext context, int index) {
@@ -159,10 +159,13 @@ class _HomePageState extends State<HomePage> {
                             Navigator.pushNamed(context, '/listMember');
                             break;
                           case 2:
-                            // Navigator.pushNamed(context, '/totalKas');
+                            Navigator.pushNamed(context, '/listTransaksi');
                             break;
                           case 3:
-                            // Navigator.pushNamed(context, '/totalLoan');
+                            Navigator.pushNamed(context, '/jenisTransaksi');
+                            break;
+                          case 4:
+                            // Navigator.pushNamed(context, '/settingBunga');
                             break;
                           default:
                             break;
@@ -198,6 +201,10 @@ class _HomePageState extends State<HomePage> {
                                     case 3:
                                       Navigator.pushNamed(
                                           context, '/jenisTransaksi');
+                                      break;
+                                    case 4:
+                                      Navigator.pushNamed(
+                                          context, '/settingBunga');
                                       break;
                                     default:
                                       break;
@@ -237,6 +244,8 @@ class _HomePageState extends State<HomePage> {
         return 'Transaksi Member';
       case 3:
         return 'Jenis Transaksi';
+      case 4:
+        return 'Bunga';
       default:
         return '';
     }
@@ -252,6 +261,8 @@ class _HomePageState extends State<HomePage> {
         return Icons.attach_money;
       case 3:
         return Icons.monetization_on;
+      case 4:
+        return Icons.percent;
       default:
         return Icons.error;
     }

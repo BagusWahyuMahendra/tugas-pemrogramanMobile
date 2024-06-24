@@ -15,12 +15,33 @@ class _MemberListPageState extends State<MemberListPage> {
   final _apiUrl = 'https://mobileapis.manpits.xyz/api';
 
   List<Member> memberList = [];
+  List<Member> filteredMemberList = [];
   bool isLoading = false;
+  TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     getMemberList();
+    searchController.addListener(() {
+      filterMembers();
+    });
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
+
+  void filterMembers() {
+    String query = searchController.text.toLowerCase();
+    setState(() {
+      filteredMemberList = memberList.where((member) {
+        return member.nama!.toLowerCase().contains(query) ||
+            member.alamat!.toLowerCase().contains(query);
+      }).toList();
+    });
   }
 
   @override
@@ -41,59 +62,83 @@ class _MemberListPageState extends State<MemberListPage> {
             Navigator.pushNamed(context, '/homepage');
           },
         ),
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(60.0),
+          child: Padding(
+            padding: EdgeInsets.all(10.0),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: TextField(
+                controller: searchController,
+                style: TextStyle(color: Colors.black),
+                decoration: InputDecoration(
+                  hintText: 'Search members...',
+                  hintStyle: TextStyle(color: Colors.black),
+                  prefixIcon: Icon(Icons.search, color: Colors.black),
+                  border: InputBorder.none,
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
+                ),
+              ),
+            ),
+          ),
+        ),
       ),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
           : Column(
               children: [
                 Expanded(
-                  child: Container(
-                    child: ListView.builder(
-                      itemCount: memberList.length,
-                      itemBuilder: (context, index) {
-                        final member = memberList[index];
-                        return Padding(
-                          padding: EdgeInsets.all(10),
-                          child: ListTile(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)),
-                            tileColor: const Color(0xFF1B8989),
-                            title: Text(
-                              member.nama ?? '',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            subtitle: Text(
-                              member.alamat ?? '',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            onTap: () {
-                              Navigator.pushNamed(context, '/detailMember',
-                                  arguments: member?.id);
-                            },
-                            trailing: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                IconButton(
-                                  icon: Icon(Icons.edit),
-                                  color: Colors.white,
-                                  onPressed: () {
-                                    Navigator.pushNamed(context, '/editMember',
-                                        arguments: member?.id);
-                                  },
-                                ),
-                                IconButton(
-                                  icon: Icon(Icons.delete),
-                                  color: Colors.white,
-                                  onPressed: () {
-                                    deleteMember(member.id ?? 0);
-                                  },
-                                ),
-                              ],
-                            ),
+                  child: ListView.builder(
+                    itemCount: filteredMemberList.length,
+                    itemBuilder: (context, index) {
+                      final member = filteredMemberList[index];
+                      return Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        child: ListTile(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
                           ),
-                        );
-                      },
-                    ),
+                          tileColor: const Color(0xFF1B8989),
+                          title: Text(
+                            member.nama ?? '',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          subtitle: Text(
+                            member.alamat ?? '',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          onTap: () {
+                            Navigator.pushNamed(context, '/detailMember',
+                                arguments: member.id);
+                          },
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: Icon(Icons.edit),
+                                color: Colors.white,
+                                onPressed: () {
+                                  Navigator.pushNamed(context, '/editMember',
+                                      arguments: member.id);
+                                },
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.delete),
+                                color: Colors.white,
+                                onPressed: () {
+                                  deleteMember(member.id ?? 0);
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ),
               ],
@@ -128,13 +173,16 @@ class _MemberListPageState extends State<MemberListPage> {
                       "telepon": memberJson["telepon"],
                     }))
                 .toList();
+            filteredMemberList = memberList;
           });
         }
       } else {
         print('Terjadi kesalahan: ${response.statusCode}');
       }
     } on DioException catch (e) {
-      isLoading = false;
+      setState(() {
+        isLoading = false;
+      });
       print('${e.response} - ${e.response?.statusCode}');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -178,6 +226,7 @@ class _MemberListPageState extends State<MemberListPage> {
                   setState(() {
                     // Hapus member dari daftar
                     memberList.removeWhere((member) => member.id == id);
+                    filteredMemberList.removeWhere((member) => member.id == id);
                   });
                 } on DioException catch (e) {
                   print('An error occurred: ${e.message}');
