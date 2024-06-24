@@ -18,6 +18,8 @@ class _ListTabunganPageState extends State<ListTabunganPage> {
 
   List<Tabungan> tabunganList = [];
   bool isLoading = false;
+  int currentPage = 1;
+  int itemsPerPage = 10;
 
   final Map<int, String> transactionTypes = {
     1: 'Saldo Awal',
@@ -88,8 +90,33 @@ class _ListTabunganPageState extends State<ListTabunganPage> {
     return formatter.format(nominal);
   }
 
+  String formatDate(String date) {
+    final formatter = DateFormat('dd-MM-yyyy');
+    return formatter.format(DateTime.parse(date));
+  }
+
+  void handleNextPage() {
+    setState(() {
+      currentPage++;
+    });
+  }
+
+  void handlePreviousPage() {
+    setState(() {
+      if (currentPage > 1) {
+        currentPage--;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final paginatedList = tabunganList
+        .skip((currentPage - 1) * itemsPerPage)
+        .take(itemsPerPage)
+        .toList();
+    int saldo = 0;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFF1B8989),
@@ -107,49 +134,82 @@ class _ListTabunganPageState extends State<ListTabunganPage> {
           },
         ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: isLoading
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            isLoading
                 ? Center(child: CircularProgressIndicator())
                 : tabunganList.isEmpty
                     ? Center(child: Text('Tabungan tidak ditemukan'))
-                    : ListView.builder(
-                        itemCount: tabunganList.length,
-                        itemBuilder: (context, index) {
-                          final tabungan = tabunganList[index];
-                          final jenisTransaksi =
-                              transactionTypes[tabungan.trxId] ?? 'Unknown';
-                          return Padding(
-                            padding: EdgeInsets.all(10),
-                            child: ListTile(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20)),
-                              tileColor: const Color(0xFF1B8989),
-                              title: Text('Jenis Transaksi: $jenisTransaksi',
-                                  style: TextStyle(color: Colors.white)),
-                              subtitle: Text(
-                                  'Nominal: Rp${formatNominal(tabungan.trxNominal!)}',
-                                  style: TextStyle(color: Colors.white)),
+                    : Expanded(
+                        child: ListView(
+                          children: [
+                            SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: DataTable(
+                                columns: [
+                                  DataColumn(
+                                      label: Text('Tanggal',
+                                          style: TextStyle(
+                                              color: Color(0xFF1B8989)))),
+                                  DataColumn(
+                                      label: Text('Jenis Transaksi',
+                                          style: TextStyle(
+                                              color: Color(0xFF1B8989)))),
+                                  DataColumn(
+                                      label: Text('Nominal',
+                                          style: TextStyle(
+                                              color: Color(0xFF1B8989)))),
+                                  DataColumn(
+                                      label: Text('Saldo',
+                                          style: TextStyle(
+                                              color: Color(0xFF1B8989)))),
+                                ],
+                                rows: paginatedList.map((tabungan) {
+                                  final jenisTransaksi =
+                                      transactionTypes[tabungan.trxId] ??
+                                          'Unknown';
+                                  if (tabungan.trxId == 1) {
+                                    saldo = tabungan.trxNominal!;
+                                  } else if (tabungan.trxId == 2) {
+                                    saldo += tabungan.trxNominal!;
+                                  } else if (tabungan.trxId == 3) {
+                                    saldo -= tabungan.trxNominal!;
+                                  }
+                                  return DataRow(
+                                    cells: [
+                                      DataCell(Text(formatDate(
+                                          tabungan.trxTanggal ?? 'N/A'))),
+                                      DataCell(Text(jenisTransaksi)),
+                                      DataCell(Text(
+                                          'Rp${formatNominal(tabungan.trxNominal!)}')),
+                                      DataCell(
+                                          Text('Rp${formatNominal(saldo)}')),
+                                    ],
+                                  );
+                                }).toList(),
+                              ),
                             ),
-                          );
-                        },
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: handlePreviousPage,
+                                  child: Text('Previous'),
+                                ),
+                                SizedBox(width: 20),
+                                ElevatedButton(
+                                  onPressed: handleNextPage,
+                                  child: Text('Next'),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-          ),
-          // Align(
-          //   alignment: Alignment.bottomCenter,
-          //   child: Padding(
-          //     padding: const EdgeInsets.all(16.0),
-          //     child: FloatingActionButton(
-          //       onPressed: () {
-          //         Navigator.pushNamed(context, '/addTabungan');
-          //       },
-          //       backgroundColor: Color(0xFF1B8989),
-          //       child: Icon(Icons.add, color: Colors.white),
-          //     ),
-          //   ),
-          // ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -159,23 +219,27 @@ class Tabungan {
   int? trxId;
   int? anggotaId;
   int? trxNominal;
+  String? trxTanggal;
 
   Tabungan({
     this.trxId,
     this.anggotaId,
     this.trxNominal,
+    this.trxTanggal,
   });
 
   Tabungan.fromJson(Map<String, dynamic> json)
       : trxId = json['trx_id'],
         anggotaId = json['anggota_id'],
-        trxNominal = json['trx_nominal'];
+        trxNominal = json['trx_nominal'],
+        trxTanggal = json['trx_tanggal'];
 
   Map<String, dynamic> toJson() {
     return {
       'trx_id': trxId,
       'anggota_id': anggotaId,
       'trx_nominal': trxNominal,
+      'trx_tanggal': trxTanggal,
     };
   }
 }
