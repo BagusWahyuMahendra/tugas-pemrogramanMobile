@@ -368,7 +368,7 @@ class _DetailMemberPageState extends State<DetailMemberPage> {
                               ),
                             ),
                             Text(
-                              'Saldo',
+                              'Total Saldo',
                               style: TextStyle(
                                 fontSize: 16,
                                 color: Color(0xFF1B8989), // Warna teks label
