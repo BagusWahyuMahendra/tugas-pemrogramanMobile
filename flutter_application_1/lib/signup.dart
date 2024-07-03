@@ -148,7 +148,6 @@ class _SignUpPageState extends State<SignUpPage> {
                         goRegister();
                       },
                       color: Color(0xFF1B8989),
-                      elevation: 0,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(50),
                       ),
@@ -261,13 +260,52 @@ class _SignUpPageState extends State<SignUpPage> {
           'password': password,
         },
       );
+      if (_response.statusCode == 200) {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return (AlertDialog(
+              title: Text('Sign Up'),
+              content: Text('Successfull, please login'),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/login');
+                    },
+                    child: Text('Ok')),
+              ],
+            ));
+          },
+        );
+      } else {
+        _showErrorDialog('Sign Up Failed');
+      }
       print(_response.data);
       _storage.write('token', _response.data['data']['token']);
-      Navigator.pushNamed(context, '/login');
     } on DioException catch (e) {
       print('${e.response} - ${e.response?.statusCode}');
       showValidationDialog("Registration failed. Please try again.");
     }
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Error'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   bool isEmailValid(String email) {

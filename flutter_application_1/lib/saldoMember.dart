@@ -46,7 +46,7 @@ class _SaldoMemberPageState extends State<SaldoMemberPage> {
       } else {
         print('Terjadi kesalahan: ${response.statusCode}');
       }
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       print('${e.response} - ${e.response?.statusCode}');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

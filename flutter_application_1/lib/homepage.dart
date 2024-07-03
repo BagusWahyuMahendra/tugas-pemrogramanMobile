@@ -42,6 +42,9 @@ class _HomePageState extends State<HomePage> {
                 Navigator.pushReplacementNamed(context, '/homepage');
               },
             ),
+            Divider(
+              thickness: 2,
+            ),
             ListTile(
               leading: Icon(Icons.person_add),
               title: Text('Add Member'),
@@ -69,6 +72,9 @@ class _HomePageState extends State<HomePage> {
               onTap: () {
                 Navigator.pushNamed(context, '/jenisTransaksi');
               },
+            ),
+            Divider(
+              thickness: 2,
             ),
             ListTile(
               leading: Icon(Icons.logout_outlined),
@@ -117,27 +123,6 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  height: 60,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Color(0xFFF5F5F7),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: TextField(
-                      cursorHeight: 20,
-                      autofocus: false,
-                      decoration: InputDecoration(
-                        hintText: "Search",
-                        prefixIcon: Icon(Icons.search),
-                        border: InputBorder.none,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 15),
                 GridView.builder(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,

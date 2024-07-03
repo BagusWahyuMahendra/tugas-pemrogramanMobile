@@ -17,11 +17,11 @@ class _EditMemberPageState extends State<EditMemberPage> {
 
   Member? member;
   DateTime? _tglLahir;
+  TextEditingController tglLahirController = TextEditingController();
 
   final TextEditingController noIndukController = TextEditingController();
   final TextEditingController namaController = TextEditingController();
   final TextEditingController alamatController = TextEditingController();
-  final TextEditingController tglLahirController = TextEditingController();
   final TextEditingController teleponController = TextEditingController();
   late int id = 0;
 
@@ -62,16 +62,18 @@ class _EditMemberPageState extends State<EditMemberPage> {
             alamatController.text = member?.alamat ?? '';
             teleponController.text = member?.telepon ?? '';
             statusAktifValue = member?.statusAktif ?? 1;
-            _tglLahir = DateFormat("yyyy-MM-dd").parse(member?.tglLahir ?? '');
+            _tglLahir = DateTime.parse(member?.tglLahir ?? '');
             tglLahirController.text =
-                DateFormat("yyyy-MM-dd").format(_tglLahir!);
+                formatDate(member?.tglLahir.toString() ?? '');
           }
         });
       } else {
         print('Terjadi kesalahan: ${_response.statusCode}');
       }
     } on DioException catch (e) {
-      isLoading = false;
+      setState(() {
+        isLoading = false;
+      });
       print('${e.response} - ${e.response?.statusCode}');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -89,6 +91,19 @@ class _EditMemberPageState extends State<EditMemberPage> {
         isLoading = false;
       });
     }
+  }
+
+  String formatDate(String? date) {
+    if (date == null) return '';
+    final parsedDate = DateTime.parse(date);
+    final formatter = DateFormat('dd-MM-yyyy');
+    return formatter.format(parsedDate);
+  }
+
+  String formatForApi(String date) {
+    final parsedDate = DateFormat('dd-MM-yyyy').parse(date);
+    final formatter = DateFormat('yyyy-MM-dd');
+    return formatter.format(parsedDate);
   }
 
   @override
@@ -156,7 +171,7 @@ class _EditMemberPageState extends State<EditMemberPage> {
               TextFormField(
                 controller: tglLahirController,
                 decoration: InputDecoration(
-                  labelText: "Tanggal Lahir (YYYY-MM-DD)",
+                  labelText: "Tanggal Lahir",
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -164,9 +179,7 @@ class _EditMemberPageState extends State<EditMemberPage> {
                       EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                   suffixIcon: IconButton(
                     icon: Icon(Icons.calendar_today),
-                    onPressed: () {
-                      // _selectDate();
-                    },
+                    onPressed: () {},
                   ),
                 ),
               ),
@@ -252,7 +265,7 @@ class _EditMemberPageState extends State<EditMemberPage> {
           'nomor_induk': noIndukController.text,
           'nama': namaController.text,
           'alamat': alamatController.text,
-          'tgl_lahir': _tglLahir != null ? _tglLahir!.toString() : '',
+          'tgl_lahir': formatForApi(tglLahirController.text),
           'telepon': teleponController.text,
           'status_aktif': statusAktifValue,
         },
@@ -284,7 +297,7 @@ class _EditMemberPageState extends State<EditMemberPage> {
       } else {
         print('Terjadi kesalahan: ${_response.statusCode}');
       }
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       print('${e.response} - ${e.response?.statusCode}');
       showDialog(
         context: context,

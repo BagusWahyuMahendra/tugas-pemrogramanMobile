@@ -19,6 +19,58 @@ class _RegisterMemberPageState extends State<RegisterMemberPage> {
 
   DateTime? _selectedDate;
 
+  final _dio = Dio();
+  final _storage = GetStorage();
+  final _apiUrl = 'https://mobileapis.manpits.xyz/api';
+
+  @override
+  void initState() {
+    super.initState();
+    _getLastNoInduk();
+  }
+
+  Future<void> _getLastNoInduk() async {
+    try {
+      final response = await _dio.get(
+        '$_apiUrl/anggota',
+        options: Options(
+          headers: {'Authorization': 'Bearer ${_storage.read('token')}'},
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        final responseData = response.data;
+        final userData = responseData['data']['anggotas'];
+        if (userData is List) {
+          final nomorIndukList = userData
+              .map((memberJson) => memberJson['nomor_induk'] as int)
+              .toList();
+          final int lastNoInduk = nomorIndukList.isNotEmpty
+              ? nomorIndukList.reduce((curr, next) => curr > next ? curr : next)
+              : 0;
+          setState(() {
+            noIndukController.text = (lastNoInduk + 1).toString();
+          });
+        }
+      } else {
+        print('Terjadi kesalahan: ${response.statusCode}');
+      }
+    } on DioException catch (e) {
+      print('${e.response} - ${e.response?.statusCode}');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Your token is expired. Login Please.',
+            textAlign: TextAlign.center,
+          ),
+          duration: Duration(seconds: 3),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      Navigator.pushReplacementNamed(context, '/login');
+    }
+  }
+
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -34,10 +86,6 @@ class _RegisterMemberPageState extends State<RegisterMemberPage> {
       });
     }
   }
-
-  final _dio = Dio();
-  final _storage = GetStorage();
-  final _apiUrl = 'https://mobileapis.manpits.xyz/api';
 
   @override
   Widget build(BuildContext context) {
@@ -93,25 +141,6 @@ class _RegisterMemberPageState extends State<RegisterMemberPage> {
                 key: _formKey,
                 child: Column(
                   children: [
-                    TextFormField(
-                      controller: noIndukController,
-                      decoration: InputDecoration(
-                        labelText: "No Induk",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        contentPadding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                        suffixIcon: Icon(Icons.confirmation_number),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter No Induk';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 15),
                     TextFormField(
                       controller: namaController,
                       decoration: InputDecoration(

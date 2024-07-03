@@ -48,7 +48,7 @@ class _SettingBungaPageState extends State<SettingBungaPage> {
           ),
         );
       }
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       print('${e.response} - ${e.response?.statusCode}');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

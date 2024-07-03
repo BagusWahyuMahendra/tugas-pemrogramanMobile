@@ -54,6 +54,7 @@ class _DetailMemberPageState extends State<DetailMemberPage> {
         final memberData = responseData['data']['anggota'];
         setState(() {
           member = Member.fromJson(memberData);
+          member!.tglLahir = formatDate(member!.tglLahir);
         });
       } else {
         print('Terjadi kesalahan: ${response.statusCode}');
@@ -97,7 +98,7 @@ class _DetailMemberPageState extends State<DetailMemberPage> {
       } else {
         print('Terjadi kesalahan: ${response.statusCode}');
       }
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       print('${e.response} - ${e.response?.statusCode}');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -142,6 +143,13 @@ class _DetailMemberPageState extends State<DetailMemberPage> {
     return formatter.format(nominal);
   }
 
+  String formatDate(String? date) {
+    if (date == null) return '';
+    final parsedDate = DateTime.parse(date);
+    final formatter = DateFormat('dd-MM-yyyy');
+    return formatter.format(parsedDate);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -178,8 +186,7 @@ class _DetailMemberPageState extends State<DetailMemberPage> {
                           backgroundColor: Color(0xFF1B8989),
                           child: CircleAvatar(
                             radius: 48,
-                            backgroundImage: AssetImage(
-                                'assets/profile.png'), // Ganti dengan path gambar profil Anda
+                            backgroundImage: AssetImage('images/profile.jpeg'),
                           ),
                         ),
                         SizedBox(height: 20),
@@ -298,10 +305,8 @@ class _DetailMemberPageState extends State<DetailMemberPage> {
                                         'Telepon',
                                         style: TextStyle(
                                           fontSize: 16,
-                                          color: Color(
-                                              0xFF1B8989), // Warna teks label
-                                          fontWeight:
-                                              FontWeight.bold, // Teks tebal
+                                          color: Color(0xFF1B8989),
+                                          fontWeight: FontWeight.bold,
                                         ),
                                       ),
                                       Container(

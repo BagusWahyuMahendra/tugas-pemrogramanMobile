@@ -104,7 +104,7 @@ class _LoginPageState extends State<LoginPage> {
                         SizedBox(height: 10),
                         GestureDetector(
                           onTap: () {
-                            // Add action for forgot password here
+                            // Add action for forgot password
                           },
                           child: Container(
                             alignment: Alignment.centerRight,

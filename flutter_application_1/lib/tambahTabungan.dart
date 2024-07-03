@@ -138,7 +138,7 @@ class _TambahTabunganPageState extends State<TambahTabunganPage> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pushNamed(context, '/listMember');
+            Navigator.pop(context);
           },
         ),
       ),

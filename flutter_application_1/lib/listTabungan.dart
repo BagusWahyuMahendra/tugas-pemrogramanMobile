@@ -111,10 +111,7 @@ class _ListTabunganPageState extends State<ListTabunganPage> {
 
   @override
   Widget build(BuildContext context) {
-    final paginatedList = tabunganList
-        .skip((currentPage - 1) * itemsPerPage)
-        .take(itemsPerPage)
-        .toList();
+    final paginatedList = tabunganList.toList();
     int saldo = 0;
 
     return Scaffold(
@@ -130,7 +127,7 @@ class _ListTabunganPageState extends State<ListTabunganPage> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pushNamed(context, '/listMember');
+            Navigator.pop(context);
           },
         ),
       ),
@@ -143,71 +140,65 @@ class _ListTabunganPageState extends State<ListTabunganPage> {
                 : tabunganList.isEmpty
                     ? Center(child: Text('Tabungan tidak ditemukan'))
                     : Expanded(
-                        child: ListView(
-                          children: [
-                            SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: DataTable(
-                                columns: [
-                                  DataColumn(
-                                      label: Text('Tanggal',
-                                          style: TextStyle(
-                                              color: Color(0xFF1B8989)))),
-                                  DataColumn(
-                                      label: Text('Jenis Transaksi',
-                                          style: TextStyle(
-                                              color: Color(0xFF1B8989)))),
-                                  DataColumn(
-                                      label: Text('Nominal',
-                                          style: TextStyle(
-                                              color: Color(0xFF1B8989)))),
-                                  DataColumn(
-                                      label: Text('Saldo',
-                                          style: TextStyle(
-                                              color: Color(0xFF1B8989)))),
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: DataTable(
+                            columns: [
+                              DataColumn(
+                                  label: Text('Tanggal',
+                                      style:
+                                          TextStyle(color: Color(0xFF1B8989)))),
+                              DataColumn(
+                                  label: Text('Jenis Transaksi',
+                                      style:
+                                          TextStyle(color: Color(0xFF1B8989)))),
+                              DataColumn(
+                                  label: Text('Nominal',
+                                      style:
+                                          TextStyle(color: Color(0xFF1B8989)))),
+                              DataColumn(
+                                  label: Text('Saldo',
+                                      style:
+                                          TextStyle(color: Color(0xFF1B8989)))),
+                            ],
+                            rows: paginatedList.map((tabungan) {
+                              final jenisTransaksi =
+                                  transactionTypes[tabungan.trxId] ?? 'Unknown';
+                              if (tabungan.trxId == 1) {
+                                saldo = tabungan.trxNominal!;
+                              } else if (tabungan.trxId == 2) {
+                                saldo += tabungan.trxNominal!;
+                              } else if (tabungan.trxId == 3) {
+                                saldo -= tabungan.trxNominal!;
+                              }
+                              return DataRow(
+                                cells: [
+                                  DataCell(Text(formatDate(
+                                      tabungan.trxTanggal ?? 'N/A'))),
+                                  DataCell(Text(jenisTransaksi)),
+                                  DataCell(Text(
+                                      'Rp${formatNominal(tabungan.trxNominal!)}')),
+                                  DataCell(Text('Rp${formatNominal(saldo)}')),
                                 ],
-                                rows: paginatedList.map((tabungan) {
-                                  final jenisTransaksi =
-                                      transactionTypes[tabungan.trxId] ??
-                                          'Unknown';
-                                  if (tabungan.trxId == 1) {
-                                    saldo = tabungan.trxNominal!;
-                                  } else if (tabungan.trxId == 2) {
-                                    saldo += tabungan.trxNominal!;
-                                  } else if (tabungan.trxId == 3) {
-                                    saldo -= tabungan.trxNominal!;
-                                  }
-                                  return DataRow(
-                                    cells: [
-                                      DataCell(Text(formatDate(
-                                          tabungan.trxTanggal ?? 'N/A'))),
-                                      DataCell(Text(jenisTransaksi)),
-                                      DataCell(Text(
-                                          'Rp${formatNominal(tabungan.trxNominal!)}')),
-                                      DataCell(
-                                          Text('Rp${formatNominal(saldo)}')),
-                                    ],
-                                  );
-                                }).toList(),
-                              ),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                ElevatedButton(
-                                  onPressed: handlePreviousPage,
-                                  child: Text('Previous'),
-                                ),
-                                SizedBox(width: 20),
-                                ElevatedButton(
-                                  onPressed: handleNextPage,
-                                  child: Text('Next'),
-                                ),
-                              ],
-                            ),
-                          ],
+                              );
+                            }).toList(),
+                          ),
                         ),
                       ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: handlePreviousPage,
+                  child: Text('Previous'),
+                ),
+                SizedBox(width: 20),
+                ElevatedButton(
+                  onPressed: handleNextPage,
+                  child: Text('Next'),
+                ),
+              ],
+            ),
           ],
         ),
       ),
